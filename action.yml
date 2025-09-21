@@ -1,0 +1,31 @@
+name: "wild"
+description: "Use the Wild linker when building Rust code"
+author: "Wild authors"
+
+inputs:
+  wild-version:
+    description: "Wild version to use"
+    required: false
+    default: "0.5.0"
+
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        case "$RUNNER_ARCH" in
+          X64)   target_arch="x86_64" ;;
+          ARM64) target_arch="aarch64" ;;
+          *) echo "Unsupported architecture: $RUNNER_ARCH" >&2; exit 1 ;;
+        esac
+
+        curl --silent -L \
+          "https://github.com/davidlattimore/wild/releases/download/${{ inputs.wild-version }}/wild-linker-${target_arch}-unknown-linux-gnu.tar.xz" \
+          | tar -xJ -C "${{ github.action_path }}" --strip-components=1
+
+        mkdir -p "$HOME/.cargo"
+        cat >> "$HOME/.cargo/config.toml" <<EOF
+# Added by wild GitHub Action
+[target.${target_arch}-unknown-linux-gnu]
+linker = "clang"
+rustflags = ["-Clink-arg=--ld-path=${{ github.action_path }}/wild"]
+EOF
