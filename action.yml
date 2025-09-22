@@ -23,5 +23,5 @@ runs:
           | tar -xJ -C "${{ github.action_path }}" --strip-components=1
 
         mkdir -p "$HOME/.cargo"
-        cat "# Added by wild GitHub Action\n[target.${target_arch}-unknown-linux-gnu]\nlinker = \"clang\"rustflags = [\"-Clink-arg=--ld-path=${{ github.action_path }}/wild\"]" >>"$HOME/.cargo/config.toml"
+        echo -e "# Added by wild GitHub Action\n[target.${target_arch}-unknown-linux-gnu]\nlinker = \"clang\"rustflags = [\"-Clink-arg=--ld-path=${{ github.action_path }}/wild\"]" >>"$HOME/.cargo/config.toml"
       shell: bash
