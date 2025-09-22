@@ -18,10 +18,8 @@ runs:
           *) echo "Unsupported architecture: $RUNNER_ARCH" >&2; exit 1 ;;
         esac
 
-        curl --silent -L \
-          "https://github.com/davidlattimore/wild/releases/download/${{ inputs.wild-version }}/wild-linker-${target_arch}-unknown-linux-gnu.tar.xz" \
-          | tar -xJ -C "${{ github.action_path }}" --strip-components=1
+        curl --proto '=https' --tlsv1.2 -LsSf https://github.com/davidlattimore/wild/releases/download/${{ inputs.wild-version }}/wild-linker-installer.sh | sh
 
         mkdir -p "$HOME/.cargo"
-        echo -e "# Added by wild GitHub Action\n[target.${target_arch}-unknown-linux-gnu]\nlinker = \"clang\"rustflags = [\"-Clink-arg=--ld-path=${{ github.action_path }}/wild\"]" >>"$HOME/.cargo/config.toml"
+        echo -e "# Added by wild GitHub Action\n[target.${target_arch}-unknown-linux-gnu]\nlinker = \"clang\"rustflags = [\"-Clink-arg=--ld-path=wild\"]\n" >>"$HOME/.cargo/config.toml"
       shell: bash
