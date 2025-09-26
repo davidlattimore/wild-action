@@ -6,7 +6,7 @@ inputs:
   wild-version:
     description: "Wild version to use"
     required: false
-    default: "0.5.0"
+    default: "0.6.0"
 
 runs:
   using: "composite"
@@ -18,7 +18,9 @@ runs:
           *) echo "Unsupported architecture: $RUNNER_ARCH" >&2; exit 1 ;;
         esac
 
-        curl --proto '=https' --tlsv1.2 -LsSf https://github.com/davidlattimore/wild/releases/download/${{ inputs.wild-version }}/wild-linker-installer.sh | sh
+        curl --silent -L \
+          "https://github.com/davidlattimore/wild/releases/download/${{ inputs.wild-version }}/wild-linker-${target_arch}-unknown-linux-gnu.tar.gz" \
+          | tar -xJ -C "${{ github.action_path }}" --strip-components=1
 
         mkdir -p "$HOME/.cargo"
         echo -e "# Added by wild GitHub Action\n[target.${target_arch}-unknown-linux-gnu]\nlinker = \"clang\"\nrustflags = [\"-Clink-arg=--ld-path=wild\"]\n" >>"$HOME/.cargo/config.toml"
