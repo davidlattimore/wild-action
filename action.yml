@@ -20,7 +20,7 @@ runs:
 
         curl --silent -L \
           "https://github.com/davidlattimore/wild/releases/download/${{ inputs.wild-version }}/wild-linker-${target_arch}-unknown-linux-gnu.tar.gz" \
-          | tar -xJ -C "${{ github.action_path }}" --strip-components=1
+          | tar -xz -C "${{ github.action_path }}" --strip-components=1
 
         mkdir -p "$HOME/.cargo"
         echo -e "# Added by wild GitHub Action\n[target.${target_arch}-unknown-linux-gnu]\nlinker = \"clang\"\nrustflags = [\"-Clink-arg=--ld-path=wild\"]\n" >>"$HOME/.cargo/config.toml"
