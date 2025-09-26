@@ -18,10 +18,12 @@ runs:
           *) echo "Unsupported architecture: $RUNNER_ARCH" >&2; exit 1 ;;
         esac
 
+        mkdir "${RUNNER_TEMP}/wild-install"
+
         curl --silent -L \
           "https://github.com/davidlattimore/wild/releases/download/${{ inputs.wild-version }}/wild-linker-${{ inputs.wild-version }}-${target_arch}-unknown-linux-gnu.tar.gz" \
-          | tar -xz -C "${{ github.action_path }}" --strip-components=1
+          | tar -xz -C "${RUNNER_TEMP}/wild-install" --strip-components=1
 
         mkdir -p "$HOME/.cargo"
-        echo -e "# Added by wild GitHub Action\n[target.${target_arch}-unknown-linux-gnu]\nlinker = \"clang\"\nrustflags = [\"-Clink-arg=--ld-path=wild\"]\n" >>"$HOME/.cargo/config.toml"
+        echo -e "# Added by wild GitHub Action\n[target.${target_arch}-unknown-linux-gnu]\nlinker = \"clang\"\nrustflags = [\"-Clink-arg=--ld-path=${RUNNER_TEMP}/wild-install/wild\"]\n" >>"$HOME/.cargo/config.toml"
       shell: bash
