@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@stable
-      - uses: davidlattimore/wild-action@main
+      - uses: davidlattimore/wild-action@latest
       - run: cargo test
 ```
 
@@ -25,8 +25,7 @@ The above workflow will use the latest version of wild. If you'd like to pin to 
 you can instead do:
 
 ```yml
-      - uses: davidlattimore/wild-action@main
-        wild-version: 0.5.0
+      - uses: davidlattimore/wild-action@0.6.0
 ```
 
 This action writes the following to `~/.cargo/config.toml`:
