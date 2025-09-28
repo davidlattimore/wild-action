@@ -32,3 +32,4 @@ runs:
           fi
         done
       shell: bash
+      if: runner.os == 'Linux'
