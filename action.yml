@@ -25,5 +25,10 @@ runs:
           | tar -xz -C "${RUNNER_TEMP}/wild-install" --strip-components=1
 
         mkdir -p "$HOME/.cargo"
-        echo -e "# Added by wild GitHub Action\n[target.${target_arch}-unknown-linux-gnu]\nlinker = \"clang\"\nrustflags = [\"-Clink-arg=--ld-path=${RUNNER_TEMP}/wild-install/wild\"]\n" >>"$HOME/.cargo/config.toml"
+        for libc in gnu musl; do
+          TARGET="target.${target_arch}-unknown-linux-${libc}"
+          if ! [[ $(grep "${TARGET}" ".cargo/config.toml") ]]; then
+                echo -e "# Added by wild GitHub Action\n[${TARGET}]\nlinker = \"clang\"\nrustflags = [\"-Clink-arg=--ld-path=${RUNNER_TEMP}/wild-install/wild\"]\n" >>"$HOME/.cargo/config.toml"
+          fi
+        done
       shell: bash
