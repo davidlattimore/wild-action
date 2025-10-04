@@ -31,7 +31,7 @@ you can instead do:
 This action writes the following to `~/.cargo/config.toml`:
 
 ```toml
-[target.${target_arch}-unknown-linux-gnu]
+[target.${target_arch}-unknown-linux-(gnu|musl)]
 linker = "clang"
 rustflags = ["-Clink-arg=--ld-path=${{ github.action_path }}/wild"]
 ```
