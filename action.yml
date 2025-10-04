@@ -27,7 +27,7 @@ runs:
         mkdir -p "$HOME/.cargo"
         for libc in gnu musl; do
           TARGET="target.${target_arch}-unknown-linux-${libc}"
-          if ! grep "${TARGET}" ".cargo/config.toml" 2>/dev/null; then
+          if ! grep "${TARGET}" "$HOME/.cargo/config.toml" 2>/dev/null; then
                 echo -e "# Added by wild GitHub Action\n[${TARGET}]\nlinker = \"clang\"\nrustflags = [\"-Clink-arg=--ld-path=${RUNNER_TEMP}/wild-install/wild\"]\n" >>"$HOME/.cargo/config.toml"
           fi
         done
